@@ -2,14 +2,8 @@
   "schema_version": 1,
   "published_data": "synthetic_only",
   "calculation_baseline": "r02-v3 rules, portable input adaptation",
-  "engineering_candidate": "published r6 blocked by independent numeric-role review; internal r7 pending one review, not published",
+  "engineering_candidate": "internal r7 engineering-ready, final real business acceptance failed; published code remains blocked r6 numeric-role example",
   "business_goal_complete": false,
-  "real_business_scores": {
-    "usable_final": "0/4",
-    "necessary": "0/16",
-    "strict": "0/4",
-    "unchanged_historical_scores": true
-  },
   "r2_independent_raw_diagnostic_necessary": "10/16, diagnostic only, not usable-final acceptance",
   "r2_real_cost": {
     "model": "qwen3.6:27b",
@@ -36,5 +30,346 @@
     ],
     "real_model_calls": 0
   },
-  "current_round_policy": "no real batch before engineering review; if still blocked record not_run and stop; no unlimited repair loop"
+  "current_round_policy": "Last real batch completed and released; no further revisions or generation; original independent reviewer evaluates necessary16/strict4, then pause.",
+  "last_r7_real_round": {
+    "formal_requests": 8,
+    "smoke_requests": 1,
+    "all_native_terminated": true,
+    "resource_window_released": true,
+    "cost_formal": {
+      "requests": 8,
+      "input_tokens": 11419,
+      "output_tokens": 2891,
+      "transport_seconds": 107.98299999997835,
+      "native_load_nanoseconds": 3047451014
+    },
+    "cost_smoke": {
+      "requests": 1,
+      "input_tokens": 33,
+      "output_tokens": 2,
+      "transport_seconds": 9.110000000015134,
+      "native_load_nanoseconds": 7260550761
+    },
+    "cost_total": {
+      "requests": 9,
+      "input_tokens": 11452,
+      "output_tokens": 2893,
+      "transport_seconds": 117.09299999999348,
+      "native_load_nanoseconds": 10308001775
+    },
+    "mechanically_usable_final": 3,
+    "generated_final_outputs": 4,
+    "case_statuses": [
+      {
+        "case": "FIN-D01",
+        "status": "completed",
+        "stages": {
+          "1": "completed",
+          "2": "completed"
+        }
+      },
+      {
+        "case": "FIN-D02",
+        "status": "business_schema_or_citation_error",
+        "stages": {
+          "1": "completed",
+          "2": "business_schema_or_citation_error"
+        }
+      },
+      {
+        "case": "FIN-D03",
+        "status": "completed",
+        "stages": {
+          "1": "completed",
+          "2": "completed"
+        }
+      },
+      {
+        "case": "FIN-D04",
+        "status": "completed",
+        "stages": {
+          "1": "completed",
+          "2": "completed"
+        }
+      }
+    ],
+    "necessary_score": 10,
+    "necessary_denominator": 16,
+    "strict_score": 1,
+    "strict_denominator": 4,
+    "independent_business_QA": "completed: goal_not_complete_then_pause",
+    "deployment_backend_confirmed": false,
+    "money_cost": null,
+    "global_E06_cumulative_real": 33,
+    "FIN_E06_cumulative_real": 21,
+    "generation_and_revision_stopped": true
+  },
+  "r7_real_requests": 9,
+  "r7_phase_usage": [
+    {
+      "request_id": "FIN_E06_V05_R7_C_SMOKE_S1",
+      "case_id": "SMOKE",
+      "stage": 1,
+      "smoke": true,
+      "status": "completed",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 33,
+      "eval_count": 2,
+      "transport_seconds": 9.110000000015134,
+      "native_total_seconds": 7.516645484,
+      "native_load_seconds": 7.260550761,
+      "native_prompt_eval_seconds": 0.129486855,
+      "native_eval_seconds": 0.052872865
+    },
+    {
+      "request_id": "FIN_E06_V05_R7_C_FIN-D01_S1",
+      "case_id": "FIN-D01",
+      "stage": 1,
+      "smoke": false,
+      "status": "completed",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 760,
+      "eval_count": 82,
+      "transport_seconds": 4.8289999999979045,
+      "native_total_seconds": 3.440112301,
+      "native_load_seconds": 0.375913405,
+      "native_prompt_eval_seconds": 0.85247481,
+      "native_eval_seconds": 2.145170204
+    },
+    {
+      "request_id": "FIN_E06_V05_R7_C_FIN-D01_S2",
+      "case_id": "FIN-D01",
+      "stage": 2,
+      "smoke": false,
+      "status": "completed",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 1857,
+      "eval_count": 640,
+      "transport_seconds": 21.73499999998603,
+      "native_total_seconds": 19.600428904,
+      "native_load_seconds": 0.351500102,
+      "native_prompt_eval_seconds": 2.064874571,
+      "native_eval_seconds": 16.716554303
+    },
+    {
+      "request_id": "FIN_E06_V05_R7_C_FIN-D02_S1",
+      "case_id": "FIN-D02",
+      "stage": 1,
+      "smoke": false,
+      "status": "completed",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 758,
+      "eval_count": 85,
+      "transport_seconds": 4.85899999999674,
+      "native_total_seconds": 3.557780858,
+      "native_load_seconds": 0.414983005,
+      "native_prompt_eval_seconds": 0.868009487,
+      "native_eval_seconds": 2.205641461
+    },
+    {
+      "request_id": "FIN_E06_V05_R7_C_FIN-D02_S2",
+      "case_id": "FIN-D02",
+      "stage": 2,
+      "smoke": false,
+      "status": "business_schema_or_citation_error",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 2440,
+      "eval_count": 683,
+      "transport_seconds": 23.34299999999348,
+      "native_total_seconds": 21.349254573,
+      "native_load_seconds": 0.406028377,
+      "native_prompt_eval_seconds": 2.667161433,
+      "native_eval_seconds": 17.766547945
+    },
+    {
+      "request_id": "FIN_E06_V05_R7_C_FIN-D03_S1",
+      "case_id": "FIN-D03",
+      "stage": 1,
+      "smoke": false,
+      "status": "completed",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 758,
+      "eval_count": 176,
+      "transport_seconds": 8.014999999984866,
+      "native_total_seconds": 5.931599797,
+      "native_load_seconds": 0.366214381,
+      "native_prompt_eval_seconds": 0.861075971,
+      "native_eval_seconds": 4.561183038
+    },
+    {
+      "request_id": "FIN_E06_V05_R7_C_FIN-D03_S2",
+      "case_id": "FIN-D03",
+      "stage": 2,
+      "smoke": false,
+      "status": "completed",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 2042,
+      "eval_count": 302,
+      "transport_seconds": 12.687000000005355,
+      "native_total_seconds": 10.664536705,
+      "native_load_seconds": 0.353501926,
+      "native_prompt_eval_seconds": 2.146577452,
+      "native_eval_seconds": 7.926783499
+    },
+    {
+      "request_id": "FIN_E06_V05_R7_C_FIN-D04_S1",
+      "case_id": "FIN-D04",
+      "stage": 1,
+      "smoke": false,
+      "status": "completed",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 758,
+      "eval_count": 176,
+      "transport_seconds": 8.078000000008615,
+      "native_total_seconds": 5.918963767,
+      "native_load_seconds": 0.348004967,
+      "native_prompt_eval_seconds": 0.871914297,
+      "native_eval_seconds": 4.556433417
+    },
+    {
+      "request_id": "FIN_E06_V05_R7_C_FIN-D04_S2",
+      "case_id": "FIN-D04",
+      "stage": 2,
+      "smoke": false,
+      "status": "completed",
+      "backend_terminated": true,
+      "done_reason": "stop",
+      "prompt_eval_count": 2046,
+      "eval_count": 747,
+      "transport_seconds": 24.437000000005355,
+      "native_total_seconds": 22.680553287,
+      "native_load_seconds": 0.431304851,
+      "native_prompt_eval_seconds": 2.17939684,
+      "native_eval_seconds": 19.498165444
+    }
+  ],
+  "FIN_E06_three_real_batches": {
+    "batches": [
+      {
+        "batch": "E06_FIN_V05_live",
+        "cost_formal": {
+          "requests": 2,
+          "input_tokens": 2240,
+          "output_tokens": 444,
+          "transport_seconds": 15.937999999994645,
+          "native_load_nanoseconds": 753275051
+        },
+        "cost_smoke": {
+          "requests": 1,
+          "input_tokens": 33,
+          "output_tokens": 2,
+          "transport_seconds": 7.85899999999674,
+          "native_load_nanoseconds": 7195341017
+        },
+        "cost_total": {
+          "requests": 3,
+          "input_tokens": 2273,
+          "output_tokens": 446,
+          "transport_seconds": 23.796999999991385,
+          "native_load_nanoseconds": 7948616068
+        }
+      },
+      {
+        "batch": "E06_FIN_V05_r2_live",
+        "cost_formal": {
+          "requests": 8,
+          "input_tokens": 10116,
+          "output_tokens": 3323,
+          "transport_seconds": 106.84400000004098,
+          "native_load_nanoseconds": 3016464536
+        },
+        "cost_smoke": {
+          "requests": 1,
+          "input_tokens": 33,
+          "output_tokens": 2,
+          "transport_seconds": 8.421000000002095,
+          "native_load_nanoseconds": 7677045173
+        },
+        "cost_total": {
+          "requests": 9,
+          "input_tokens": 10149,
+          "output_tokens": 3325,
+          "transport_seconds": 115.26500000004307,
+          "native_load_nanoseconds": 10693509709
+        }
+      },
+      {
+        "batch": "E06_FIN_V05_r7_live",
+        "cost_formal": {
+          "requests": 8,
+          "input_tokens": 11419,
+          "output_tokens": 2891,
+          "transport_seconds": 107.98299999997835,
+          "native_load_nanoseconds": 3047451014
+        },
+        "cost_smoke": {
+          "requests": 1,
+          "input_tokens": 33,
+          "output_tokens": 2,
+          "transport_seconds": 9.110000000015134,
+          "native_load_nanoseconds": 7260550761
+        },
+        "cost_total": {
+          "requests": 9,
+          "input_tokens": 11452,
+          "output_tokens": 2893,
+          "transport_seconds": 117.09299999999348,
+          "native_load_nanoseconds": 10308001775
+        }
+      }
+    ],
+    "cost_total": {
+      "requests": 21,
+      "input_tokens": 23874,
+      "output_tokens": 6664,
+      "transport_seconds": 256.15500000002794,
+      "native_load_nanoseconds": 28950127552
+    },
+    "scope": "FIN only, excludes RAG; prior frozen costs and scores unchanged",
+    "money_cost": null
+  },
+  "historical_r2_business_scores": {
+    "usable_final": "0/4",
+    "necessary": "0/16",
+    "strict": "0/4",
+    "unchanged_historical_scores": true
+  },
+  "last_r7_independent_business_scores": {
+    "mechanically_usable_final": {
+      "n": 3,
+      "denominator": 4
+    },
+    "primary_necessary": {
+      "n": 10,
+      "denominator": 16
+    },
+    "strict_tasks": {
+      "n": 1,
+      "denominator": 4
+    },
+    "strict_case": "FIN-D03",
+    "raw_diagnostic_necessary": {
+      "n": 13,
+      "denominator": 16,
+      "not_primary": true
+    },
+    "goal_complete": false,
+    "remaining_issues": [
+      "D02 base-year amounts labeled as current-year periods; final rejected",
+      "D01 and D04 competing explanations lack explicit support/refutation decision conditions"
+    ],
+    "QA_generation": 0,
+    "raw_and_history_unchanged": true,
+    "final_native_requests_terminated": 9,
+    "released": true,
+    "status": "paused; no further revisions or generation"
+  }
 }
