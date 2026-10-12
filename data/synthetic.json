@@ -1,0 +1,51 @@
+{
+  "synthetic": true,
+  "records": [
+    {
+      "company_code": "SYN001",
+      "name": "合成公司 A（非真实公司）",
+      "period": "2023-12-31",
+      "scope": "consolidated",
+      "currency": "CNY",
+      "raw_unit": "CNY",
+      "source_id": "synthetic-demo-v1",
+      "report_version": "synthetic-v1",
+      "fields": {
+        "TotalAssets": "1000",
+        "TotalLiability": "600",
+        "OperatingEvenue": "800",
+        "NetProfit": "80",
+        "ProfitParent": "70",
+        "OperatingCashFlow": "100"
+      },
+      "comparability": {
+        "previous_year": 2022,
+        "status": "synthetic_comparable",
+        "evidence": "Synthetic fixture only; not audited financial statements"
+      }
+    },
+    {
+      "company_code": "SYN001",
+      "name": "合成公司 A（非真实公司）",
+      "period": "2024-12-31",
+      "scope": "consolidated",
+      "currency": "CNY",
+      "raw_unit": "CNY",
+      "source_id": "synthetic-demo-v1",
+      "report_version": "synthetic-v1",
+      "fields": {
+        "TotalAssets": "1200",
+        "TotalLiability": "720",
+        "OperatingEvenue": "880",
+        "NetProfit": "96",
+        "ProfitParent": "84",
+        "OperatingCashFlow": "110"
+      },
+      "comparability": {
+        "previous_year": 2023,
+        "status": "synthetic_comparable",
+        "evidence": "Synthetic fixture only; not audited financial statements"
+      }
+    }
+  ]
+}

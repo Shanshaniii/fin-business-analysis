@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "published_data": "synthetic_only",
+  "calculation_baseline": "r02-v3 rules, portable input adaptation",
+  "engineering_candidate": "r6 pending independent review, no real generation",
+  "business_goal_complete": false,
+  "real_business_scores": {
+    "usable_final": "0/4",
+    "necessary": "0/16",
+    "strict": "0/4",
+    "unchanged_historical_scores": true
+  },
+  "r2_independent_raw_diagnostic_necessary": "10/16, diagnostic only, not usable-final acceptance",
+  "r2_real_cost": {
+    "model": "qwen3.6:27b",
+    "formal_requests": 8,
+    "smoke_requests": 1,
+    "input_tokens": 10149,
+    "output_tokens": 3325,
+    "transport_seconds": 115.265,
+    "formal_input_tokens": 10116,
+    "formal_output_tokens": 3323,
+    "formal_transport_seconds": 106.844,
+    "money_cost": null
+  },
+  "E06_cumulative_real_requests_before_r6": 12,
+  "r6_real_requests": 0,
+  "synthetic_tests_are_not_business_accuracy": true,
+  "deployment_backend_confirmed": false,
+  "publication_not_production_acceptance": true
+}

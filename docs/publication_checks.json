@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "files_scanned": 13,
+  "findings": [],
+  "restricted_raw_data_or_report_fulltext": false,
+  "internal_paths_or_addresses": false,
+  "synthetic_data_only": true,
+  "tests_passed": 7,
+  "CLI": "python -m fin_analysis",
+  "HTTP_page_and_API": "passed",
+  "scope": "allowlisted publication source files, not credential stores",
+  "not_external_secret_scanner": true
+}

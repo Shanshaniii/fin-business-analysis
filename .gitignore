@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.env*
+local_data/
+outputs/
+*.pdf
+*.csv
+*grant*
+*authorization*
+*.key
+*.pem
