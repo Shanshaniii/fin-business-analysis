@@ -1,4 +1,5 @@
 import unittest
+from copy import deepcopy
 from fin_analysis.answer_v2 import resolve_answer
 
 
@@ -27,3 +28,25 @@ class ReferenceContract(unittest.TestCase):
                        {'facts': None, 'references': []}, {'facts': []}, []):
             with self.subTest(answer=answer), self.assertRaises(ValueError):
                 resolve_answer(answer, self.registry)
+
+    def test_optional_required_refs_keep_default_interface_compatible(self):
+        answer={'facts': [{'ref': 'B1'}], 'references': []}
+        expected=resolve_answer(answer, self.registry)
+        self.assertEqual(expected,resolve_answer(answer,self.registry,required_tool_refs=[]))
+        self.assertEqual(expected,resolve_answer(answer,self.registry,required_tool_refs=['B1']))
+
+    def test_missing_tool_citation_is_rejected_without_filling_answer(self):
+        answer={'facts': [], 'references': [{'ref': 'P1'}]}
+        before=deepcopy(answer)
+        with self.assertRaisesRegex(ValueError,'required_tool_result_not_cited:B1'):
+            resolve_answer(answer,self.registry,required_tool_refs=['B1'])
+        self.assertEqual(answer,before)
+
+    def test_requirements_must_resolve_to_trusted_financial_records(self):
+        for required in ('B1', ['UNKNOWN'], ['P1'], ['B1','B1'], [None]):
+            with self.subTest(required=required),self.assertRaises(ValueError):
+                resolve_answer({'facts':[{'ref':'B1'}],'references':[]},self.registry,
+                               required_tool_refs=required)
+        with self.assertRaises(ValueError):
+            resolve_answer({'facts':[{'ref':'B1'}],'references':[]},
+                           {**self.registry,'BAD':[]},required_tool_refs=['BAD'])

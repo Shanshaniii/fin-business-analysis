@@ -1,6 +1,6 @@
 {
-  "version": "V2.0-demo",
-  "source_revision": "r2.3_complete_20261026_portable_subset",
+  "version": "V2.0.1-demo",
+  "source_revision": "r2.4_contract_20261027_portable_subset",
   "scope": "Synthetic Decimal calculation, numeric role gate and ref-only fact/reference slot demonstration. No model transport or private production data.",
   "model_calls": 0,
   "semantic_acceptance": "not_evaluated",
@@ -9,14 +9,15 @@
   "files_sha256": {
     "data/synthetic.json": "a0d6e615c002ca281be86fa30880c599ce293a5e893d393e4cb2ed1a27d069a5",
     "fin_analysis/__init__.py": "bb745c36a273d466cfd92efbde0d4519247988c9b17a8c4964944effd3ae4e40",
-    "fin_analysis/__main__.py": "e65331b6adb6a73b88f23714699c0c8355682f60ff43f5fbffe54cf6eddde0ce",
-    "fin_analysis/answer_v2.py": "0f4a10c7542f0ee84a0c9deec9eb2a5066c4697d05155aa17dfe30196c276c22",
+    "fin_analysis/__main__.py": "84818dc4a364c337e159824cc64f3bf37298fb0fab7529e8ba078a7fe1ec136d",
+    "fin_analysis/answer_v2.py": "887bf78913420a9b5fac49e754ad9b44a003ffc91ac045b3e572803a0e000953",
     "fin_analysis/contracts.py": "86726b40555fd7bf88ad84283c4f6284632230031b5f56edfee125049c474f9f",
     "fin_analysis/engine.py": "7e6a57cf63f8521211134ace4a366bba05f977c6700d513f26f829540bda6d43",
     "fin_analysis/numeric_roles.py": "de3810778f282a108f08d28b0713a0e6293f97d0bdcd2fcb74de08be24a39cba",
-    "tests/test_answer_v2.py": "4afe4911df07c1cd3947a41bfa89bb55da1d9806ae2f4c053cbaad86786634d2",
+    "tests/test_answer_v2.py": "94b62803bb45b6f1f97a06a36ba5dc7fccc4af7ffcbb2043155c77a0373cc039",
     "tests/test_engine.py": "603de82239d3beea11f44b6cad5f654514c077e98545edf552247669048333da",
     "tests/test_numeric_roles.py": "0b15091b30f19440098eafccba9c9bc00c1d5dd2705266f40f8f380493017c5d"
   },
-  "hash_basis": "File text bytes with CRLF normalized to LF, matching canonical Git text blobs; excludes manifest itself."
+  "hash_basis": "File text bytes with CRLF normalized to LF, matching canonical Git text blobs; excludes manifest itself.",
+  "patch_scope": "Optional required financial tool-reference coverage, synthetic positive/negative cases, and independently reviewed private real-run aggregates. Default demo performs no model call."
 }

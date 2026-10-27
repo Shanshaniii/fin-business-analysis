@@ -2,7 +2,7 @@
   "schema_version": 2,
   "published_data": "synthetic_only",
   "calculation_baseline": "r02-v3 rules, portable input adaptation",
-  "engineering_candidate": "V2 public synthetic reference-contract demo; latest internal r2.3 offline candidate is not a production acceptance result",
+  "engineering_candidate": "V2 portable synthetic demo; private r2.4 real revalidation has partial system acceptance, separate from model-only explanation quality",
   "business_goal_complete": false,
   "r2_independent_raw_diagnostic_necessary": "10/16, diagnostic only, not usable-final acceptance",
   "r2_real_cost": {
@@ -411,5 +411,111 @@
     "real_model_calls_in_release_preparation": 0,
     "r23_true_revalidation": "not_run",
     "truncation_prevention_proven_by_live_run": false
+  },
+  "new_api_real_revalidation": {
+    "date": "2026-10-27",
+    "model": "qwen3.6:27b",
+    "model_digest": "a50eda8ed977ab48a12431878896b27ffd5cef552c17af3317d9623b939a7f1e",
+    "service_version": "0.32.3",
+    "old_service_version": "0.20.0",
+    "same_model_digest_as_Q25": true,
+    "num_ctx": 12288,
+    "num_predict": 2400,
+    "old_Q25_num_predict": 1600,
+    "scope": "Two fixed development cases D02 and D04; no held-out generalization claim. Same selected cases across these two rounds; prompt/contract checks changed together.",
+    "rounds": [
+      {
+        "revision": "r2.3",
+        "generation_requests": 5,
+        "smoke_requests": 1,
+        "formal_requests": 4,
+        "all_backend_terminated": true,
+        "input_tokens": 6393,
+        "output_tokens": 1302,
+        "total_tokens": 7695,
+        "client_seconds": 123.315,
+        "native_seconds": 120.305042788,
+        "native_load_seconds_included": 49.293539516,
+        "formal_client_seconds": 41.096,
+        "mechanical_final": {
+          "pass": 0,
+          "total": 2
+        },
+        "accepted_final_required": {
+          "pass": 0,
+          "total": 8
+        },
+        "system_strict": {
+          "pass": 0,
+          "total": 2
+        },
+        "original_failed_outputs_preserved": true
+      },
+      {
+        "revision": "r2.4",
+        "generation_requests": 5,
+        "smoke_requests": 1,
+        "formal_requests": 4,
+        "all_backend_terminated": true,
+        "input_tokens": 6397,
+        "output_tokens": 1214,
+        "total_tokens": 7611,
+        "client_seconds": 50.859,
+        "native_seconds": 48.533521163,
+        "native_load_seconds_included": 15.890865633,
+        "formal_client_seconds": 38.203,
+        "mechanical_final": {
+          "pass": 2,
+          "total": 2
+        },
+        "system_final_required": {
+          "pass": 7,
+          "total": 8
+        },
+        "system_strict": {
+          "pass": 1,
+          "total": 2
+        },
+        "model_raw_required": {
+          "pass": 5,
+          "total": 8
+        },
+        "model_only_strict": {
+          "pass": 0,
+          "total": 2
+        },
+        "attribution": "System final contains explicitly labelled deterministic program tables for comparison basis. Program-rendered facts are not model-authored financial reasoning."
+      }
+    ],
+    "total_generation_requests": 10,
+    "total_input_tokens": 12790,
+    "total_output_tokens": 2516,
+    "total_tokens": 15306,
+    "total_client_seconds": 174.174,
+    "metadata_show_posts_excluded": 1,
+    "automatic_retries": 0,
+    "money_cost": null,
+    "remaining_issues": [
+      "Model raw answer does not independently explain all original/adjusted comparison-basis details.",
+      "One competing explanation has inconsistent mechanism and support/refutation directions.",
+      "Missing-data claims must name specific absent fields and not deny supplied absolute liability values."
+    ],
+    "comparability_limits": [
+      "New service version and endpoint differ from Q25.",
+      "Output budget changed from historical 1600 to 2400.",
+      "Cold loading is included in client/native totals; load is not added again.",
+      "The new deployment token-bound proof was not asserted; empirical/native counts are reported."
+    ]
+  },
+  "latest_public_package_validation": {
+    "tests_pass": 13,
+    "default_model_calls": 0,
+    "default_data": "synthetic",
+    "not_business_accuracy": true
+  },
+  "latest_internal_candidate_validation": {
+    "revision": "r2.4",
+    "offline_tests_pass": 116,
+    "real_revalidation_included": "new_api_real_revalidation"
   }
 }
