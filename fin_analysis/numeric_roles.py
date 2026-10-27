@@ -16,6 +16,9 @@ def decimal_token(token):
  token=token.replace(',','');token=re.sub(r'^(百分之|千分之)','',token)
  if re.fullmatch(r'[-+]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?',token):return Decimal(token)
  sign=-1 if token.startswith('负') else 1;token=token.lstrip('负正');parts=token.split('点')
+ if len(parts)>2 or not parts[0] or (len(parts)==2 and not parts[1]):raise ValueError('malformed_chinese_decimal')
+ # Unsupported compound multipliers must not decode into a different amount.
+ if '万亿' in parts[0] or any(parts[0].count(u)>1 for u in '十百千万亿'):raise ValueError('unsupported_chinese_compound_unit')
  def integer(s):
   if s.isdigit():return int(s)
   if all(c in DIGITS for c in s):return int(''.join(str(DIGITS[c]) for c in s))
@@ -44,6 +47,31 @@ METRIC_NAMES={
  'parent_profit_growth':['归母净利润同比','归属于母公司股东净利润同比'],
  'cash_profit_ratio':['经营现金净流量净利润比','经营现金净额合并净利润比','经营现金流净额合并净利润比'],
  'cash_revenue_ratio':['经营现金净流量营业收入比','经营现金净额营业收入比','经营现金流净额营业收入比']}
+
+COMPANY_ALIASES={'000333':('美的集团','美的'), '600519':('贵州茅台','茅台'), '601668':('中国建筑',)}
+def asserted_company_codes(text):
+ """Closed-universe contradictions only; this is not entity resolution."""
+ found=set()
+ for code,names in COMPANY_ALIASES.items():
+  for name in names:
+   for m in re.finditer(re.escape(name),text):
+    prefix=text[max(0,m.start()-7):m.start()]
+    if not re.search(r'(?:不属于|不同于|并非|不是|非|不含|不包括)$',prefix):found.add(code)
+ return found
+
+def asserts_standalone_scope(text):
+ for m in re.finditer(r'母公司(?:单体|报表|口径)|单体报表',text):
+  prefix=text[max(0,m.start()-8):m.start()]
+  if not re.search(r'(?:不是|并非|不等于|不代表|不属于|而非|非)$',prefix):return True
+ return False
+
+def context_binding_errors(text,p):
+ """Check issuer/scope even when the model omits every numeric token."""
+ errors=[]
+ if p.get('_company_code') and asserted_company_codes(text)-{p['_company_code']}:errors.append('fact_subject_mismatch')
+ if p.get('scope') in ('consolidated','合并报表','合并报表；归母字段为股东归属子集') and asserts_standalone_scope(text):errors.append('consolidated_fact_claimed_standalone')
+ return errors
+
 def local_metric(text,start,p):
  sentence=re.split(r'[。；;\n]',text[:start])[-1]
  prefix=re.split(r'[,，、]',sentence)[-1]
@@ -56,19 +84,22 @@ def local_metric(text,start,p):
  outer=[m for m in matches if not any(n[0]<=m[0] and n[1]>=m[1] and n[:2]!=m[:2] for n in matches)]
  chosen=max(outer,key=lambda m:(m[1],m[1]-m[0]))
  if chosen[2]!=p['metric']:return False
+ # A name authorizes only its immediately attached result. No reach across
+ # another result, coordinator, unknown indicator or arbitrary free text.
+ attachment=prefix[chosen[1]:]
+ if not re.fullmatch(r'\s*(?:(?:为|是|等于|达到|录得|数值为|数值|增长|:|：|=)\s*)*',attachment):return False
+ if '增长' in attachment and (not p['metric'].endswith('_growth') or Decimal(p['display_value'])<0):return False
+ adjacent=prefix[:chosen[0]]
+ if re.search(r'(?:营业|经营|销售|税前|税后|扣非|归母)$',adjacent):return False
  context=prefix[:chosen[0]]
  tail=re.split(r'[,，、。；;\n]',text[start:])[0]
  explicit_years=re.findall(r'(20[0-9]{2})(?:年|-[0-9]{2}-[0-9]{2})',sentence+tail)
  if explicit_years and explicit_years[-1]!=p['period'][:4]:return False
- if re.search(r'母公司(?:单体|报表|口径)|单体报表',tail):return False
- for company,code in [('美的','000333'),('贵州茅台','600519'),('茅台','600519'),('中国建筑','601668')]:
-  if company in tail and p.get('_company_code') and p['_company_code']!=code:return False
+ if context_binding_errors(tail,p):return False
  years=re.findall(r'(20[0-9]{2})年',sentence)
  if years and years[-1]!=p['period'][:4]:return False
- if re.search(r'母公司(?:单体|报表|口径)|单体报表',sentence):return False
+ if context_binding_errors(sentence,p):return False
  if '归母' in prefix[chosen[1]:] and p['metric']!='parent_profit_growth':return False
- for company,code in [('美的','000333'),('贵州茅台','600519'),('茅台','600519'),('中国建筑','601668')]:
-  if company in sentence and p.get('_company_code') and p['_company_code']!=code:return False
  unit=re.match(r'\s*(%|％|倍|CNY|人民币元|万元|亿元|元|美元|个百分点|个基点)',text[start:])
  return True
 
@@ -110,6 +141,8 @@ def check(text,kind,p,partial=False):
   date=provenance.get('period')
   if date:add_spans(spans,text,r'(?:字段|来源)(?:期间|日期)为?'+re.escape(date),'source_period_metadata')
  elif kind=='fact':
+  binding_errors=context_binding_errors(text,p)
+  if binding_errors and not partial:raise ValueError(binding_errors[0])
   # Exact period/year has a calendar role; each result must equal this metric and occur in its named statement.
   year=p['period'][:4];add_spans(spans,text,re.escape(p['period']),'metric_period');add_spans(spans,text,re.escape(year)+r'年','metric_period')
   value=Decimal(p['display_value']);name=re.sub(r'^20[0-9]{2}年','',p['display_name'])
@@ -120,6 +153,7 @@ def check(text,kind,p,partial=False):
    clause=re.split(r'[。；;]',text[:m.start()])[-1]
    unit_suffix=re.match(r'\s*(%|％|倍|CNY|元|万元|亿元)',text[m.end():])
    if unit_suffix and unit_suffix.group(1) not in (p['unit_label'],'％' if p['unit_label']=='%' else p['unit_label']):continue
+   if unit_suffix and re.match(r'\s*(?:个百分点|个基点|万元|亿元|美元|USD|EUR)',text[m.end()+unit_suffix.end():]):continue
    if local_metric(text,m.start(),p) and (unit_suffix or m.group().startswith('百分之')):spans.append({'start':m.start(),'end':m.end(),'role':'registered_metric_result','source_text':m.group()})
  elif kind=='basis':
   spans=policy_spans(text,p['accounting_policy_evidence'])
@@ -132,12 +166,21 @@ def check(text,kind,p,partial=False):
    if re.match(r'\s*(?:%|％|倍|个百分点)',suffix):continue
    clause=re.split(r'[,，。；;]',text[:m.start()])[-1]
    amount=decimal_token(m.group())
-   if any(x in clause for x in ('调整后','重述后','调整值','调整基期')) and amount!=Decimal(p['adjusted_base_CNY']):continue
-   if any(x in clause for x in ('调整前','原值','原基期')) and amount!=Decimal(p['original_base_CNY']):continue
-   if any(x in clause for x in ('本期','当期','当前')) and amount!=Decimal(p['selected_current_CNY']):continue
-   if ('营业收入' in clause or '归母' in clause) and p['field']=='NetProfit':continue
-   if '合并净利润' in clause and p['field']=='NPParentCompanyOwners':continue
-   if re.match(r'\s*(?:CNY|人民币元|元)(?![A-Za-z])',suffix) or ('单位CNY' in clause or '单位为CNY' in clause):spans.append({'start':m.start(),'end':m.end(),'role':'registered_basis_CNY_amount','source_text':m.group()})
+   roles=[(key,period) for key,period in (('original_base_CNY',p['growth_base_period']),('adjusted_base_CNY',p['growth_base_period']),('selected_current_CNY',p['current_period'])) if amount==Decimal(p[key])]
+   labels=[]
+   for pattern,key in ((r'调整后|重述后|调整值|调整基期','adjusted_base_CNY'),(r'调整前|原值|原基期','original_base_CNY'),(r'本期|当期|当前','selected_current_CNY')):
+    labels += [(x.end(),key) for x in re.finditer(pattern,clause)]
+   if labels:roles=[x for x in roles if x[0]==max(labels)[1]]
+   # Each amount is paired with its own stored period, never a year-set lookup.
+   tail=re.split(r'[,，。；;]|以及|及|同时|而|和|与',text[m.end():])[0]
+   local_dates=re.findall(r'20[0-9]{2}-[0-9]{2}-[0-9]{2}|20[0-9]{2}年',clause+tail)
+   if local_dates:
+    date=local_dates[-1]
+    roles=[x for x in roles if x[1]==date or (date.endswith('年') and x[1][:4]==date[:4])]
+   if not roles:continue
+   if ('营业收入' in clause or '营业利润' in clause or '归母' in clause) and p['field']=='NetProfit':continue
+   if ('合并净利润' in clause or '营业利润' in clause or '营业收入' in clause) and p['field']=='ProfitParent':continue
+   if re.match(r'\s*(?:CNY|人民币元|元)(?![A-Za-z])',suffix) or ('单位CNY' in clause or '单位为CNY' in clause):spans.append({'start':m.start(),'end':m.end(),'role':'registered_basis_CNY_amount','source_text':m.group(),'amount_period_pairs':[{'field':p['field'],'amount_role':key,'period':period} for key,period in roles]})
  else:raise ValueError('unknown_record_kind_numeric_role')
  # Chinese quantities are covered by the same approved occurrence spans.
  rejected=[];approved=[]

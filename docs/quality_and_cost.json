@@ -1,8 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "published_data": "synthetic_only",
   "calculation_baseline": "r02-v3 rules, portable input adaptation",
-  "engineering_candidate": "internal r7 engineering-ready, final real business acceptance failed; published code remains blocked r6 numeric-role example",
+  "engineering_candidate": "V2 public synthetic reference-contract demo; latest internal r2.3 offline candidate is not a production acceptance result",
   "business_goal_complete": false,
   "r2_independent_raw_diagnostic_necessary": "10/16, diagnostic only, not usable-final acceptance",
   "r2_real_cost": {
@@ -30,7 +30,7 @@
     ],
     "real_model_calls": 0
   },
-  "current_round_policy": "Last real batch completed and released; no further revisions or generation; original independent reviewer evaluates necessary16/strict4, then pause.",
+  "current_round_policy": "Continue V2 release and iteration under current authorization; preserve historical scores and record actual use",
   "last_r7_real_round": {
     "formal_requests": 8,
     "smoke_requests": 1,
@@ -371,5 +371,45 @@
     "final_native_requests_terminated": 9,
     "released": true,
     "status": "paused; no further revisions or generation"
+  },
+  "latest_real_Q25": {
+    "date": "2026-10-25",
+    "requests": 9,
+    "formal_requests": 8,
+    "smoke_requests": 1,
+    "backend_terminated": 9,
+    "input_tokens": 12410,
+    "output_tokens": 4702,
+    "total_tokens": 17112,
+    "transport_seconds": 159.063000000198,
+    "mechanical_final": {
+      "n": 2,
+      "denominator": 4
+    },
+    "business_acceptance": "not_established",
+    "cases": {
+      "D01": "mechanical_completed",
+      "D02": "business_schema_or_citation_error",
+      "D03": "mechanical_completed",
+      "D04": "business_truncation"
+    },
+    "money_cost": null,
+    "scope": "latest inspected historical run, not this public demo or new candidate validation"
+  },
+  "v2_release_validation": {
+    "public_unittests": {
+      "run": 10,
+      "failures": 0,
+      "errors": 0
+    },
+    "internal_explicit_offline_suite": {
+      "run": 107,
+      "failures": 0,
+      "errors": 0,
+      "scope": "synthetic controls and immutable historical replay; separate private integration candidate"
+    },
+    "real_model_calls_in_release_preparation": 0,
+    "r23_true_revalidation": "not_run",
+    "truncation_prevention_proven_by_live_run": false
   }
 }
